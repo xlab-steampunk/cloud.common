@@ -134,4 +134,22 @@ def test_prepare_args_dedup_aliases():
         "bar": {"aliases": ["bar"], "type": int},
     }
     params = {"foo": 1, "bar": 1}
+    assert prepare_args(argspec, params) == {"ANSIBLE_MODULE_ARGS": {"foo": 1}}
+
+
+def test_prepare_args_dedup_aliases_only_value():
+    argspec = {
+        "foo": {"aliases": ["bar"], "type": int},
+        "bar": {"aliases": ["bar"], "type": int},
+    }
+    params = {"foo": 1}
+    assert prepare_args(argspec, params) == {"ANSIBLE_MODULE_ARGS": {"foo": 1}}
+
+
+def test_prepare_args_dedup_aliases_only_alias():
+    argspec = {
+        "foo": {"aliases": ["bar"], "type": int},
+        "bar": {"aliases": ["bar"], "type": int},
+    }
+    params = {"bar": 1}
     assert prepare_args(argspec, params) == {"ANSIBLE_MODULE_ARGS": {"bar": 1}}
